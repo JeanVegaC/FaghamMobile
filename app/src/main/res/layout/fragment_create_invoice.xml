@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".modules.invoice.ui.CreateInvoiceFragment">
+
+    <!-- Contenedor de desplazamiento -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Campo para la fecha -->
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Fecha:"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:paddingEnd="8dp" />
+
+            <EditText
+                android:id="@+id/editTextDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese la fecha"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewDate"
+                android:inputType="date"
+                android:layout_margin="16dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background" />
+
+            <!-- Campo para el nombre del cliente -->
+            <TextView
+                android:id="@+id/textViewClientName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Nombre del Cliente:"
+                app:layout_constraintTop_toBottomOf="@id/editTextDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:paddingEnd="8dp" />
+
+            <EditText
+                android:id="@+id/editTextClientName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese el nombre del cliente"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewClientName"
+                android:layout_margin="16dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background" />
+
+            <!-- Campo para el Ruc  -->
+
+            <TextView
+                android:id="@+id/textViewClientRuc"
+                android:layout_width="172dp"
+                android:layout_height="19dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Ruc del Cliente:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextClientName" />
+
+            <EditText
+                android:id="@+id/editTextClientRuc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese el ruc del cliente"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textViewClientRuc"
+                android:inputType="number"
+                android:layout_margin="16dp"
+                android:padding="12dp"
+                android:background="@drawable/edittext_background" />
+
+            <TextView
+                android:id="@+id/textViewProducts"
+                android:layout_width="172dp"
+                android:layout_height="19dp"
+                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Productos:"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextClientRuc" />
+
+            <!-- Botón para agregar producto -->
+
+            <Button
+                android:id="@+id/buttonAddProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Agregar Producto"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textViewProducts" />
+
+            <TextView
+                android:id="@+id/textViewProductCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Código/Descripción"
+                app:layout_constraintTop_toBottomOf="@+id/buttonAddProduct"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:paddingEnd="8dp"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextViewProduct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese el código o descripción del producto"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewProductCode"
+                android:layout_margin="16dp"
+                android:padding="12dp"
+                />
+
+            <TextView
+                android:id="@+id/textViewProductName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Nombre del Producto"
+                app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextViewProduct"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:paddingEnd="8dp"/>
+
+            <EditText
+                android:id="@+id/editTextProductName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese el nombre del producto"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewProductName"
+                android:layout_margin="16dp"
+                android:padding="12dp"/>
+
+            <TextView
+                android:id="@+id/textViewQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Cantidad"
+                app:layout_constraintTop_toBottomOf="@+id/editTextProductName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:paddingEnd="8dp"/>
+
+            <EditText
+                android:id="@+id/editTextQuantity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese la cantidad"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewQuantity"
+                android:layout_margin="16dp"
+                android:padding="12dp"/>
+
+            <TextView
+                android:id="@+id/textViewPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Precio"
+                app:layout_constraintTop_toBottomOf="@+id/editTextQuantity"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="16dp"
+                android:paddingEnd="8dp" />
+
+            <EditText
+                android:id="@+id/editTextPrice"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ingrese el precio"
+                android:inputType="number"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewPrice"
+                android:layout_margin="16dp"
+                android:padding="12dp"/>
+
+            <!-- RecyclerView para mostrar los productos añadidos -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPrice"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="12dp">
+
+                <TextView
+                    android:layout_width="27dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="Código" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="Nombre" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cantidad"
+                    android:gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Precio"
+                    android:gravity="center_horizontal"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Acc."
+                    android:gravity="center_horizontal"/>
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewProducts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPrice"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <Button
+                android:id="@+id/buttonEmitInvoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Emitir Comprobante"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerViewProducts"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

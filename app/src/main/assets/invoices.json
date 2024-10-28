@@ -1,0 +1,38 @@
+[
+  {
+    "id": "INV001",
+    "date": "2023-10-25",
+    "clientName": "Cliente Ejemplo",
+    "clientRuc": "12345678901",
+    "totalAmount": 1500.75,
+    "items": [
+      {
+        "productCode": "PROD001",
+        "productName": "Producto A",
+        "quantity": 2,
+        "price": 250.5
+      },
+      {
+        "productCode": "PROD002",
+        "productName": "Producto B",
+        "quantity": 1,
+        "price": 1000.0
+      }
+    ]
+  },
+  {
+    "id": "INV002",
+    "date": "2023-10-26",
+    "clientName": "Otro Cliente",
+    "clientRuc": "98765432101",
+    "totalAmount": 750.0,
+    "items": [
+      {
+        "productCode": "PROD003",
+        "productName": "Producto C",
+        "quantity": 3,
+        "price": 250.0
+      }
+    ]
+  }
+]
