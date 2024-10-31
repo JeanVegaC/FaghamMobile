@@ -2,6 +2,7 @@ package com.example.faghamsac.modules.invoice.ui
 
 import android.content.Context
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,10 +35,11 @@ class InvoicesAdapter(private val invoices: List<Invoice>) :
 
     override fun onBindViewHolder(holder: InvoiceViewHolder, position: Int) {
         val invoice = invoices[position]
-        holder.invoiceDate.text = invoice.date
-        holder.clientName.text = invoice.clientName
-        holder.clientRuc.text = invoice.clientRuc
-        holder.totalAmount.text = "%.2f".format(invoice.totalAmount)
+        Log.d("Invoice", "invoice ${invoice}")
+        holder.invoiceDate.text = invoice.fechaEmision
+        holder.clientName.text = invoice.razonSocialEmisor
+        holder.clientRuc.text = invoice.rucEmisor.toString()
+        holder.totalAmount.text = "%.2f".format(invoice.total)
 
         holder.buttonDownload.setOnClickListener {
             downloadInvoiceAsText(invoice, holder.itemView.context)
@@ -47,30 +49,7 @@ class InvoicesAdapter(private val invoices: List<Invoice>) :
     override fun getItemCount() = invoices.size
 
     private fun downloadInvoiceAsText(invoice: Invoice, context: Context) {
-        val fileName = "invoice_${invoice.id}.txt"
-        val content = StringBuilder().apply {
-            appendLine("{")
-            appendLine("  \"id\": \"${invoice.id}\",")
-            appendLine("  \"date\": \"${invoice.date}\",")
-            appendLine("  \"clientName\": \"${invoice.clientName}\",")
-            appendLine("  \"clientRuc\": \"${invoice.clientRuc}\",")
-            appendLine("  \"totalAmount\": ${invoice.totalAmount},")
-            appendLine("  \"items\": [")
-            invoice.items.forEachIndexed { index, item ->
-                append("    {")
-                append("\"id\": \"${item.productCode}\", ")
-                append("\"name\": \"${item.productName}\", ")
-                append("\"quantity\": ${item.quantity}, ")
-                append("\"price\": ${item.price}")
-                append("}")
-                if (index < invoice.items.size - 1) append(",")
-                appendLine()
-            }
-            appendLine("  ]")
-            appendLine("}")
-        }.toString()
 
-        saveToDownloads(fileName, content, context)
     }
 
     private fun saveToDownloads(fileName: String, data: String, context: Context) {

@@ -1,11 +1,36 @@
 package com.example.faghamsac.modules.invoice.model
 
 data class InvoiceItem(
-    val productCode: String,
-    val productName: String,
-    val quantity: Int,
-    val price: Double
-) {
-    val total: Double
-        get() = quantity * price
-}
+    val cantidad: Int = 0,
+    val caracteristicas: String? = null,
+    val codpro: String = "",
+    val cuenta: String? = null,
+    val datosAdicionales: Map<String, Any> = emptyMap(),
+    val descuentoUnitario: Double? = null,
+    val detraccionDetalleItem: String? = null,
+    val factorConversion: Double? = null,
+    val fechaVencimientoLote: String? = null,
+    val flagPaquete: String? = null,
+    val icbper: Double? = null,
+    val isc: Double? = null,
+    val lote: String? = null,
+    val nombreProducto: String = "",
+    val nuItem: Int = 0,
+    val numero: String? = null,
+    val placa: String? = null,
+    val precioUnitario: Double = 0.0,
+    val precioVenta: Double = 0.0,
+    val rucEmisor: Long = 0L,
+    val serial: String? = null,
+    val serie: String? = null,
+    val stockActual: Int? = null,
+    val tipoAfectacion: String = "",
+    val tipoComprobante: String? = null,
+    val unidadCodigo: String? = null,
+    val unidadMedida: String = "",
+    val unidadMedidaNombre: String? = null,
+    val usaLote: Boolean? = null,
+    val usaSerie: Boolean? = null,
+    val valorUnitario: Double = 0.0,
+    val valorVenta: Double = 0.0
+)

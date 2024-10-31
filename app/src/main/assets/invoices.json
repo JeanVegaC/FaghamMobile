@@ -2,8 +2,8 @@
   {
     "id": "INV001",
     "date": "2023-10-25",
-    "clientName": "Cliente Ejemplo",
-    "clientRuc": "12345678901",
+    "clientName": "Jhean",
+    "clientRuc": "10759302244",
     "totalAmount": 1500.75,
     "items": [
       {
@@ -23,8 +23,8 @@
   {
     "id": "INV002",
     "date": "2023-10-26",
-    "clientName": "Otro Cliente",
-    "clientRuc": "98765432101",
+    "clientName": "Carlos",
+    "clientRuc": "10256228233",
     "totalAmount": 750.0,
     "items": [
       {
