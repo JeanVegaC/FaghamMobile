@@ -233,7 +233,7 @@ class CreateInvoiceFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch { // Cambiado a lifecycleScope
             try {
-                val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJjN2FlMDExZC1iY2MxLTQ2NzctODRjYS00ZGE3NWMzMzFmMTUiLCJpYXQiOjE3MzA0MDY0ODAsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQzNTI4MH0.UXyiwigWadjkgNmFUuHuvNMxXiNQNu_QDljghUucYs0"
+                val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNDdiYjQyMS0wZjg0LTQ2NGItYWUwZi01NGQ5MzZhZTAzYWQiLCJpYXQiOjE3MzA0MTUwMjcsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQ0MzgyN30._PDFfI868cph3YKx6uMDBNT8uyjkhal9XUH_OL6K8tI"
 
                 val response: Response<Respuesta> = invoiceService.emitCotizacion(payloadString, token)
 
