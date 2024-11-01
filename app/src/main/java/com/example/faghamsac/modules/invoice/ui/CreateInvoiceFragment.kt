@@ -62,21 +62,19 @@ class CreateInvoiceFragment : Fragment() {
         productsList = mutableListOf()
         productsAdapter = ProductsAdapter(productsList)
 
-        // Asigna el LayoutManager y el adaptador al RecyclerView
         binding.recyclerViewProducts.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewProducts.adapter = productsAdapter
 
-        // Lógica para el botón "Agregar Producto"
         binding.buttonAddProduct.setOnClickListener {
-            // Obtener los valores de los campos
+        
             val productCode = binding.autoCompleteTextViewProduct.text.toString()
             val productName = binding.editTextProductName.text.toString()
             val quantity = binding.editTextQuantity.text.toString()
             val precioVenta = binding.editTextPrice.text.toString()
 
-            // Validar que los campos no estén vacíos
+        
             if (productCode.isNotBlank() && productName.isNotBlank() && quantity.isNotBlank() && precioVenta.isNotBlank()) {
-                // Crear un nuevo producto
+            
                 val newProduct = CotizacionItem(
                     codigoProducto = productCode,
                     nombreProducto = productName,
@@ -88,21 +86,21 @@ class CreateInvoiceFragment : Fragment() {
                     valorVenta = BigDecimal(precioVenta)
                 )
 
-                // Agregar el producto a tu lista
+            
                 productsList.add(newProduct)
 
                 Toast.makeText(requireContext(), "Se agregó el producto", Toast.LENGTH_SHORT).show()
 
-                // Notificar al adaptador que los datos han cambiado
+                
                 productsAdapter.notifyDataSetChanged()
 
-                // Limpiar los campos después de agregar el producto
+
                 binding.autoCompleteTextViewProduct.setText("")
                 binding.editTextProductName.setText("")
                 binding.editTextQuantity.setText("")
                 binding.editTextPrice.setText("")
             } else {
-                // Mostrar un mensaje de error o advertencia
+                
                 Toast.makeText(requireContext(), "Por favor, complete todos los campos.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -127,15 +125,15 @@ class CreateInvoiceFragment : Fragment() {
                 val code = s.toString()
                 val product = products.find { it.code == code }
                 if (product != null) {
-                    // Si encontramos el producto, actualiza los campos
+                    
                     binding.editTextProductName.setText(product.name)
                     binding.editTextPrice.setText(product.price.toString())
 
-                    // Cerrar el teclado
+                
                     val imm = requireActivity().getSystemService(InputMethodManager::class.java)
                     imm.hideSoftInputFromWindow(binding.autoCompleteTextViewProduct.windowToken, 0)
                 } else {
-                    // Si no encontramos el producto, limpia los campos
+                    
                     binding.editTextProductName.setText("")
                     binding.editTextQuantity.setText("")
                     binding.editTextPrice.setText("")
@@ -144,51 +142,51 @@ class CreateInvoiceFragment : Fragment() {
         })
 
         binding.buttonEmitInvoice.setOnClickListener {
-            // Recoger los datos de la factura
+        
             val clientName = binding.editTextClientName.text.toString()
             val clientRuc = binding.editTextClientRuc.text.toString()
-            val invoiceType = "BOLETA" // O usar el valor del combobox
+            val invoiceType = "BOLETA" // 
 
             val detalleDocumento = productsList.map { item ->
                 mapOf(
-                    "codigoProducto" to item.codigoProducto, // Asegúrate de que este campo no sea vacío
+                    "codigoProducto" to item.codigoProducto, 
                     "nombreProducto" to item.nombreProducto,
                     "caracteristicas" to null, // Opcional, usa "" si es null
-                    "cantidad" to BigDecimal(item.cantidad.toString()), // Asegúrate de convertir a BigDecimal
-                    "isc" to (item.isc?.let { BigDecimal(it.toString()) }), // Cambia según tu contexto
-                    "tipoAfectacion" to "10", // Asegúrate de que esto sea correcto según tu contexto
-                    "precioVenta" to BigDecimal(item.precioVenta.toString()), // Asegúrate de convertir a BigDecimal
-                    "valorUnitario" to BigDecimal(item.valorUnitario.toString()), // Cambia según tu contexto
-                    "precioUnitario" to BigDecimal(item.precioUnitario.toString()), // Cambia según tu contexto
-                    "descuentoUnitario" to (item.descuentoUnitario?.let { BigDecimal(it.toString()) }), // Cambia según tu contexto
-                    "valorVenta" to BigDecimal((item.precioVenta * item.cantidad).toString()), // Cálculo del valor de venta
-                    "descuentoEsPorcentaje" to  false, // Opcional
-                    "usaSerie" to (item.usaSerie ?: ""), // Opcional
-                    "unidadMedida" to "UNIDAD_BIENES", // Cambia según tu contexto
-                    "unidadMedidaNombre" to "UNIDAD_BIENES", // Cambia según tu contexto
-                    "flagPaquete" to item.flagPaquete // Cambia según tu contexto
+                    "cantidad" to BigDecimal(item.cantidad.toString()), 
+                    "isc" to (item.isc?.let { BigDecimal(it.toString()) }), 
+                    "tipoAfectacion" to "10",
+                    "precioVenta" to BigDecimal(item.precioVenta.toString()),
+                    "valorUnitario" to BigDecimal(item.valorUnitario.toString()), 
+                    "precioUnitario" to BigDecimal(item.precioUnitario.toString()), 
+                    "descuentoUnitario" to (item.descuentoUnitario?.let { BigDecimal(it.toString()) }), 
+                    "valorVenta" to BigDecimal((item.precioVenta * item.cantidad).toString()), 
+                    "descuentoEsPorcentaje" to  false, 
+                    "usaSerie" to (item.usaSerie ?: ""), 
+                    "unidadMedida" to "UNIDAD_BIENES", 
+                    "unidadMedidaNombre" to "UNIDAD_BIENES", 
+                    "flagPaquete" to item.flagPaquete 
                 )
             }
 
-            // Crear el payload
+            
             val payload = mapOf(
                 "numero" to null,
                 "rucReceptor" to clientRuc,
-                "tipoDocReceptor" to "01", // Cambiar según sea necesario
+                "tipoDocReceptor" to "01", 
                 "razonSocialReceptor" to clientName,
-                "direccionReceptor" to null, // Cambiar según sea necesario
+                "direccionReceptor" to null, 
                 "moneda" to "PEN",
-                "emailReceptor" to null, // Cambiar según sea necesario
+                "emailReceptor" to null, 
                 "fechaEmision" to LocalDate.now().toString(),
-                "fechaVencimiento" to "2024-11-07", // Cambia esta fecha si es necesario
-                "subtotal" to BigDecimal("0"), // Cambiar según el cálculo
-                "igv" to BigDecimal("0"), // Cambiar según el cálculo
+                "fechaVencimiento" to "2024-11-07", 
+                "subtotal" to BigDecimal("0"), 
+                "igv" to BigDecimal("0"), 
                 "total" to (detalleDocumento.sumOf { it["valorVenta"] as BigDecimal }).toString(),
-                "totalGravadas" to "0", // Cambiar según el cálculo
-                "totalExoneradas" to "0", // Cambiar según el cálculo
-                "totalInafectas" to "0", // Cambiar según el cálculo
-                "totalOtrosImpuestos" to "0", // Cambiar según el cálculo
-                "isc" to "0", // Cambiar según el cálculo
+                "totalGravadas" to "0", 
+                "totalExoneradas" to "0",
+                "totalInafectas" to "0", 
+                "totalOtrosImpuestos" to "0", 
+                "isc" to "0", 
                 "totalOtrosCargos" to null,
                 "observacion" to "",
                 "factorCambio" to "",
@@ -206,17 +204,17 @@ class CreateInvoiceFragment : Fragment() {
                 "vendedor" to "andrearocioarroyo@hotmail.com"
             )
 
-            // Convertir el payload a JSON
+    
             val jsonPayload = Gson().toJson(payload)
 
             Log.d("payload", "p $jsonPayload")
 
-            // Emitir la cotización
+        
             emitInvoice(jsonPayload, onSuccess = { respuesta ->
-                // Maneja la respuesta exitosa
+                
                 Toast.makeText(requireContext(), "Cotización emitida: $respuesta", Toast.LENGTH_SHORT).show()
             }, onError = { error ->
-                // Maneja el error
+    
                 Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
             })
 
@@ -225,7 +223,7 @@ class CreateInvoiceFragment : Fragment() {
     }
 
     private fun emitInvoice(payload: String, onSuccess: (Respuesta?) -> Unit, onError: (String) -> Unit) {
-        // Asegúrate de inicializar invoiceService antes de llamar
+        
         var payloadString = JSONObject(payload).toString()
 
         Log.d("JSON Payload", payloadString) // Verifica el JSON generado
@@ -260,26 +258,21 @@ class CreateInvoiceFragment : Fragment() {
     }
 
     private fun setupSpinner() {
-        // Crear una lista de los tipos de comprobante
+        
         val tiposComprobante = InvoiceTypeEnum.values().map { it.descripcion }
 
-        // Crear un adaptador para el spinner
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, tiposComprobante)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        // Establecer el adaptador en el spinner
+    
         spinnerTipoComprobante.adapter = adapter
 
-        // Configurar el listener para obtener el tipo seleccionado
+
         spinnerTipoComprobante.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val tipoSeleccionado = tiposComprobante[position]
-                // Manejar el tipo seleccionado aquí
-                // Puedes guardar el código correspondiente si lo necesitas
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // No hacer nada
+        
+            
             }
         })
     }
