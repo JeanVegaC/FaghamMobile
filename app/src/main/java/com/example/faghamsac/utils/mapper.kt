@@ -11,10 +11,10 @@ import com.example.faghamsac.modules.invoice.model.Receptor
 
 fun mapApiResponseToInvoices(apiResponse: QuotationPagination): List<Quotation> {
     return apiResponse.result.map { result ->
-        // Mapea el detalle, que es un array de objetos dentro de cada objeto de result
+        
         val detalle = result.detalle?.map { item ->
             QuotationDetalle(
-                codigoProducto = item.codigoProducto, // Cambiado a "codigoProducto"
+                codigoProducto = item.codigoProducto, 
                 cantidad = item.cantidad,
                 nombreProducto = item.nombreProducto,
                 precioVenta = item.precioVenta,
@@ -31,10 +31,8 @@ fun mapApiResponseToInvoices(apiResponse: QuotationPagination): List<Quotation> 
                 direccion = it.direccion,
                 email = it.email
             )
-        } ?: Receptor() // Asigna un nuevo objeto Receptor con valores por defecto si es nulo
+        } ?: Receptor() 
 
-
-        // Crea una instancia de Invoice con los valores de result y el detalle mapeado
         Quotation(
             numero = result.numero,
             moneda = result.moneda,
