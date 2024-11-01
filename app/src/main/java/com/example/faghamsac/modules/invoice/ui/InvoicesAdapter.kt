@@ -17,7 +17,7 @@ import com.example.faghamsac.modules.invoice.model.Quotation
 import com.example.faghamsac.modules.invoice.services.InvoiceService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch // Asegúrate de importar launch
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 import java.io.File
@@ -58,11 +58,11 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
     override fun getItemCount() = invoices.size
 
     private fun downloadPdf(invoice: Quotation, context: Context) {
-        val rucEmisor = "10256228233" // Asegúrate de usar el RUC correcto
-        val numero = 30 // El número de la cotización
-        val tipo = "A4" // El tipo de PDF
-        val ruc = "10256228233" // RUC opcional
-        val formato = "BASE64" // RUC opcional
+        val rucEmisor = "10256228233"
+        val numero = 30 
+        val tipo = "A4" 
+        val ruc = "10256228233" 
+        val formato = "BASE64" 
 
         CoroutineScope(Dispatchers.IO).launch {
             val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNDdiYjQyMS0wZjg0LTQ2NGItYWUwZi01NGQ5MzZhZTAzYWQiLCJpYXQiOjE3MzA0MTUwMjcsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQ0MzgyN30._PDFfI868cph3YKx6uMDBNT8uyjkhal9XUH_OL6K8tI"
@@ -77,7 +77,7 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
                     val pdfFile = convertBase64ToPdf(base64String, context)
 
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "PDF descargado con éxito", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "PDF descargado", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     withContext(Dispatchers.Main) {
@@ -98,10 +98,8 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
     private fun convertBase64ToPdf(base64String: String, context: Context): File {
         val pdfFile = File(context.getExternalFilesDir(null), "invoice.pdf")
 
-        // Verifica que el directorio exista
         pdfFile.parentFile?.mkdirs()
 
-        // Decodificar los bytes y escribir en el archivo PDF
         val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
 
         FileOutputStream(pdfFile).use { outputStream ->
