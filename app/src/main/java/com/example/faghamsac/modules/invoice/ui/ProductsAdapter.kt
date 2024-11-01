@@ -38,7 +38,7 @@ class ProductsAdapter(private val items: MutableList<CotizacionItem>) : Recycler
         holder.textViewPrice.text = item.precioVenta.toString()
 
         holder.buttonDeleteProduct.setOnClickListener {
-            // Lógica para eliminar el producto
+            
             removeAt(position)
         }
     }
@@ -48,7 +48,7 @@ class ProductsAdapter(private val items: MutableList<CotizacionItem>) : Recycler
     }
 
     private fun removeAt(position: Int) {
-        items.removeAt(position) // Asegúrate de usar el nombre correcto de tu lista
+        items.removeAt(position)
         notifyItemRemoved(position)
         notifyItemRangeChanged(position, items.size)
     }
