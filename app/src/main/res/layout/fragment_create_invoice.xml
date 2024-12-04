@@ -16,30 +16,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Campo para la fecha -->
             <TextView
-                android:id="@+id/textViewDate"
+                android:id="@+id/textViewInvoiceType"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Fecha:"
+                android:text="Tipo Comprobante:"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="16dp"
                 android:paddingEnd="8dp" />
 
-            <EditText
-                android:id="@+id/editTextDate"
+            <Spinner
+                android:id="@+id/spinnerTipoComprobante"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="Ingrese la fecha"
+                app:layout_constraintTop_toBottomOf="@id/textViewInvoiceType"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textViewDate"
-                android:inputType="date"
                 android:layout_margin="16dp"
-                android:padding="12dp"
-                android:background="@drawable/edittext_background" />
+                android:paddingEnd="8dp" />
 
             <!-- Campo para el nombre del cliente -->
             <TextView
@@ -47,7 +43,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Nombre del Cliente:"
-                app:layout_constraintTop_toBottomOf="@id/editTextDate"
+                app:layout_constraintTop_toBottomOf="@id/spinnerTipoComprobante"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="16dp"

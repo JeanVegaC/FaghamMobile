@@ -6,39 +6,43 @@
     android:orientation="vertical">
 
     <TableLayout
-        android:layout_width="match_parent"
+        android:layout_width="341dp"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
         <TableRow>
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:text="Fecha"
-                android:textStyle="bold"
-                android:gravity="center_horizontal"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:text="Cliente"
-                android:textStyle="bold"
-                android:gravity="center_horizontal"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:text="RUC"
-                android:textStyle="bold"
-                android:gravity="center_horizontal"/>
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center_horizontal"
                 android:text="Total"
-                android:textStyle="bold"
-                android:gravity="center_horizontal"/>
+                android:textStyle="bold" />
         </TableRow>
     </TableLayout>
 

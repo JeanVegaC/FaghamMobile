@@ -2,6 +2,8 @@ package com.example.faghamsac.modules.invoice.ui
 
 import android.content.Context
 import android.os.Environment
+import android.util.Base64
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +11,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.faghamsac.modules.invoice.model.Invoice
 import com.example.faghamsac.R
+import com.example.faghamsac.configuration.ApiClient
+import com.example.faghamsac.modules.invoice.model.Quotation
+import com.example.faghamsac.modules.invoice.services.InvoiceService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class InvoicesAdapter(private val invoices: List<Invoice>) :
+class InvoicesAdapter(private val invoices: List<Quotation>, private val invoiceService: InvoiceService) :
     RecyclerView.Adapter<InvoicesAdapter.InvoiceViewHolder>() {
+
 
     inner class InvoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val invoiceDate: TextView = itemView.findViewById(R.id.textViewDate)
@@ -34,63 +44,70 @@ class InvoicesAdapter(private val invoices: List<Invoice>) :
 
     override fun onBindViewHolder(holder: InvoiceViewHolder, position: Int) {
         val invoice = invoices[position]
-        holder.invoiceDate.text = invoice.date
-        holder.clientName.text = invoice.clientName
-        holder.clientRuc.text = invoice.clientRuc
-        holder.totalAmount.text = "%.2f".format(invoice.totalAmount)
+        Log.d("Invoice", "invoice ${invoice}")
+        holder.invoiceDate.text = invoice.fechaEmision
+        holder.clientName.text = invoice.razonSocialReceptor
+        holder.clientRuc.text = invoice.rucReceptor.toString()
+        holder.totalAmount.text = "%.2f".format(invoice.total)
 
         holder.buttonDownload.setOnClickListener {
-            downloadInvoiceAsText(invoice, holder.itemView.context)
+            downloadPdf(invoice, holder.itemView.context)
         }
     }
 
     override fun getItemCount() = invoices.size
 
-    private fun downloadInvoiceAsText(invoice: Invoice, context: Context) {
-        val fileName = "invoice_${invoice.id}.txt"
-        val content = StringBuilder().apply {
-            appendLine("{")
-            appendLine("  \"id\": \"${invoice.id}\",")
-            appendLine("  \"date\": \"${invoice.date}\",")
-            appendLine("  \"clientName\": \"${invoice.clientName}\",")
-            appendLine("  \"clientRuc\": \"${invoice.clientRuc}\",")
-            appendLine("  \"totalAmount\": ${invoice.totalAmount},")
-            appendLine("  \"items\": [")
-            invoice.items.forEachIndexed { index, item ->
-                append("    {")
-                append("\"id\": \"${item.productCode}\", ")
-                append("\"name\": \"${item.productName}\", ")
-                append("\"quantity\": ${item.quantity}, ")
-                append("\"price\": ${item.price}")
-                append("}")
-                if (index < invoice.items.size - 1) append(",")
-                appendLine()
+    private fun downloadPdf(invoice: Quotation, context: Context) {
+        val rucEmisor = "10256228233"
+        val numero = 30 
+        val tipo = "A4" 
+        val ruc = "10256228233" 
+        val formato = "BASE64" 
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNDdiYjQyMS0wZjg0LTQ2NGItYWUwZi01NGQ5MzZhZTAzYWQiLCJpYXQiOjE3MzA0MTUwMjcsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQ0MzgyN30._PDFfI868cph3YKx6uMDBNT8uyjkhal9XUH_OL6K8tI"
+
+            try {
+
+                val response = invoiceService.downloadPdf(numero, tipo, ruc, formato)
+
+                if (response.isSuccessful) {
+                    val base64String = response.body() ?: return@launch
+                    Log.d("PDF Response", "Response body: $base64String")
+                    val pdfFile = convertBase64ToPdf(base64String, context)
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "PDF descargado", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Log.d("download pdf error", "Código de error: ${response.code()}, Mensaje: ${response}")
+                        Toast.makeText(context, "Error al descargar el PDF: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("download pdf error", "Error: ${e.message}", e)
+                    Toast.makeText(context, "Error al descargar el PDF: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
-            appendLine("  ]")
-            appendLine("}")
-        }.toString()
-
-        saveToDownloads(fileName, content, context)
-    }
-
-    private fun saveToDownloads(fileName: String, data: String, context: Context) {
-        // Carpeta de descargas
-        val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-        val file = File(downloadsDir, fileName)
-
-        try {
-            // Guardar el archivo en la ubicación de descargas
-            FileOutputStream(file).use { output ->
-                output.write(data.toByteArray())
-            }
-
-            // Confirmación al usuario
-            Toast.makeText(context, "Archivo descargado en la carpeta de descargas", Toast.LENGTH_SHORT).show()
-
-        } catch (e: IOException) {
-            // Mostrar error si ocurre
-            Toast.makeText(context, "Error al guardar el archivo", Toast.LENGTH_SHORT).show()
-            e.printStackTrace()
         }
     }
+
+
+    private fun convertBase64ToPdf(base64String: String, context: Context): File {
+        val pdfFile = File(context.getExternalFilesDir(null), "invoice.pdf")
+
+        pdfFile.parentFile?.mkdirs()
+
+        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+
+        FileOutputStream(pdfFile).use { outputStream ->
+            outputStream.write(decodedBytes)
+        }
+        return pdfFile
+    }
+
+
+
 }

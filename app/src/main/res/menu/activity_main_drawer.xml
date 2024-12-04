@@ -12,10 +12,7 @@
             android:id="@+id/listInvoice"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_listInvoice" />
-        <item
-            android:id="@+id/createQuotation"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_createQuotation" />
+
         <item
             android:id="@+id/listQuotation"
             android:icon="@drawable/ic_menu_camera"

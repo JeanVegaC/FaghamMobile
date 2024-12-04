@@ -30,12 +30,12 @@ class MainActivity : AppCompatActivity() {
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        // Configuración de AppBarConfiguration
+        
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.createInvoice, // ID de tu InvoiceFragment
-                R.id.listInvoice,  // ID de tu QuotationFragment
-                //R.id.inventoryFragment   ID de tu InventoryFragment
+                R.id.createInvoice, 
+                R.id.listInvoice, 
+                //R.id.inventoryFragment
             ), drawerLayout
         )
 
@@ -53,5 +53,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    fun example() {
+        return Unit;
     }
 }
