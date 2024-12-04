@@ -10,11 +10,17 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.faghamsac.R
 import com.example.faghamsac.configuration.ApiClient
+import com.example.faghamsac.modules.invoice.model.Aplicacion
+import com.example.faghamsac.modules.invoice.model.Invoice
+import com.example.faghamsac.modules.invoice.model.PdfRequest
 import com.example.faghamsac.modules.invoice.model.Quotation
+import com.example.faghamsac.modules.invoice.model.TokenRequest
 import com.example.faghamsac.modules.invoice.services.InvoiceService
+import com.example.faghamsac.modules.invoice.services.TokenService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch // Asegúrate de importar launch
@@ -24,9 +30,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class InvoicesAdapter(private val invoices: List<Quotation>, private val invoiceService: InvoiceService) :
+class InvoicesAdapter(private val invoices: List<Invoice>, private val invoiceService: InvoiceService) :
     RecyclerView.Adapter<InvoicesAdapter.InvoiceViewHolder>() {
-
+    private lateinit var tokenService: TokenService
 
     inner class InvoiceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val invoiceDate: TextView = itemView.findViewById(R.id.textViewDate)
@@ -37,6 +43,7 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int, ): InvoiceViewHolder {
+        tokenService = ApiClient.createService(TokenService::class.java)
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_invoice, parent, false)
         return InvoiceViewHolder(view)
@@ -45,9 +52,9 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
     override fun onBindViewHolder(holder: InvoiceViewHolder, position: Int) {
         val invoice = invoices[position]
         Log.d("Invoice", "invoice ${invoice}")
-        holder.invoiceDate.text = invoice.fechaEmision
-        holder.clientName.text = invoice.razonSocialReceptor
-        holder.clientRuc.text = invoice.rucReceptor.toString()
+        holder.invoiceDate.text = invoice.fecha_emision
+        holder.clientName.text = invoice.razon_social_receptor
+        holder.clientRuc.text = invoice.ruc_receptor
         holder.totalAmount.text = "%.2f".format(invoice.total)
 
         holder.buttonDownload.setOnClickListener {
@@ -57,7 +64,7 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
 
     override fun getItemCount() = invoices.size
 
-    private fun downloadPdf(invoice: Quotation, context: Context) {
+    private fun downloadPdf(invoice: Invoice, context: Context) {
         val rucEmisor = "10256228233" // Asegúrate de usar el RUC correcto
         val numero = 30 // El número de la cotización
         val tipo = "A4" // El tipo de PDF
@@ -65,32 +72,53 @@ class InvoicesAdapter(private val invoices: List<Quotation>, private val invoice
         val formato = "BASE64" // RUC opcional
 
         CoroutineScope(Dispatchers.IO).launch {
-            val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNDdiYjQyMS0wZjg0LTQ2NGItYWUwZi01NGQ5MzZhZTAzYWQiLCJpYXQiOjE3MzA0MTUwMjcsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQ0MzgyN30._PDFfI868cph3YKx6uMDBNT8uyjkhal9XUH_OL6K8tI"
+                val request = TokenRequest(
+                    mail = "andrearocioarroyo@gmail.com",
+                    ruc = "10754522904",
+                    clave = "\$\$pruebasC2U",
+                    aplicacion = Aplicacion(codigo = "1")
+                )
 
-            try {
+                // Llamar al servicio
+                val response = tokenService.getToken(request)
 
-                val response = invoiceService.downloadPdf(numero, tipo, ruc, formato)
-
+                // Verificar la respuesta
                 if (response.isSuccessful) {
-                    val base64String = response.body() ?: return@launch
-                    Log.d("PDF Response", "Response body: $base64String")
-                    val pdfFile = convertBase64ToPdf(base64String, context)
+                    val tokenResponse = response.body()
+                    val token = "Bearer " + tokenResponse?.c2uToken ?: ""
 
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "PDF descargado con éxito", Toast.LENGTH_SHORT).show()
+                    Log.d("Token", "Token obtenido: $token")
+
+                    val pdfRequest = PdfRequest("10754522904", invoice.numero, invoice.serie, invoice.tipo_comprobante)
+
+                    val response = invoiceService.getPdfBase64(pdfRequest, token)
+                    Log.d("base64", "base64: $response")
+
+                    if (response.isSuccessful) {
+                        try {
+                            val base64String = response.body()?.string() ?:""
+                            Log.d("PDF Response", "Response body: $base64String")
+                            val pdfFile = convertBase64ToPdf(base64String, context)
+
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "PDF descargado con éxito", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch(e: Error) {
+                            withContext(Dispatchers.Main) {
+                                Log.d("download pdf error", "Código de error: ${response}, Mensaje: ${response}")
+                                Toast.makeText(context, "Error al descargar el PDF: ${response}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else {
+                        Log.e("PDF Error", "Error: ${response.message()}")
                     }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        Log.d("download pdf error", "Código de error: ${response.code()}, Mensaje: ${response}")
-                        Toast.makeText(context, "Error al descargar el PDF: ${response.message()}", Toast.LENGTH_SHORT).show()
-                    }
+
+
+
+
+
                 }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Log.e("download pdf error", "Error: ${e.message}", e)
-                    Toast.makeText(context, "Error al descargar el PDF: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
+
         }
     }
 

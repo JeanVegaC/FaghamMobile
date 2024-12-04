@@ -1,8 +1,11 @@
 package com.example.faghamsac.modules.invoice.services
 
 import com.example.faghamsac.modules.invoice.model.InvoicePagination
+import com.example.faghamsac.modules.invoice.model.InvoiceRequest
+import com.example.faghamsac.modules.invoice.model.PdfRequest
 import com.example.faghamsac.modules.invoice.model.QuotationPagination
 import com.example.faghamsac.modules.invoice.model.Respuesta
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -51,12 +54,24 @@ interface InvoiceService {
     @POST("comprobantesapi/cotizacion")
     suspend fun emitCotizacion(@Body cotizacion: String, @Header("Authorization") token: String): Response<Respuesta>
 
-    @GET("r-clientes-api/cotizacion/pdf/{numero}/{tipo}")
-    suspend fun downloadPdf(
-        @Path("numero") numero: Int,
+    @Headers(
+        "Content-Type: application/json",
+        "Accept: application/json",
+        "Accept-Language: en-US",
+        "Connection: keep-alive"
+    )
+    @PUT("/apiemisor/invoice2u/integracion/{tipo}")
+    suspend fun emitInvoice(
+        @Body request: InvoiceRequest,
         @Path("tipo") tipo: String,
-        @Query("ruc") ruc: String,
-        @Query("formato") formato: String = "BASE64"
-    ): Response<String>
+        @Header("Authorization") token: String
+    ): Response<Respuesta>
+
+
+    @PUT("pdfapi/pdfapi/consultarPdf")
+    suspend fun getPdfBase64(
+        @Body pdfRequest: PdfRequest,
+        @Header("Authorization") token: String
+    ): Response<ResponseBody>
 
 }

@@ -10,8 +10,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.faghamsac.R
 import com.example.faghamsac.modules.invoice.model.InvoiceItem
+import com.example.faghamsac.modules.invoice.model.Product
 
-class ProductsAdapter(private val items: MutableList<CotizacionItem>) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
+class ProductsAdapter(private val items: MutableList<Product>) : RecyclerView.Adapter<ProductsAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -32,10 +33,10 @@ class ProductsAdapter(private val items: MutableList<CotizacionItem>) : Recycler
         Log.d("RecyclerView", "Binding item at position $position: $item")
 
 
-        holder.textViewProductCode.text = item.codigoProducto
-        holder.textViewProductName.text = item.nombreProducto
+        holder.textViewProductCode.text = item.code
+        holder.textViewProductName.text = item.name
         holder.textViewQuantity.text = item.cantidad.toString()
-        holder.textViewPrice.text = item.precioVenta.toString()
+        holder.textViewPrice.text = item.price.toString()
 
         holder.buttonDeleteProduct.setOnClickListener {
             // Lógica para eliminar el producto
