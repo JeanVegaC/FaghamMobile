@@ -45,7 +45,7 @@ class InvoiceListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val sharedPreferences = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-                val token = sharedPreferences.getString("token", "") // Obtiene el token guardado o un valor vacío si no existe
+                val token = sharedPreferences.getString("token", "")
 
                 Log.d("Token asd", "Token obtenido: $token")
 

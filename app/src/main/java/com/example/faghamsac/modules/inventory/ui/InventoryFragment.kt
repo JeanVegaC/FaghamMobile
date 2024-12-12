@@ -62,7 +62,6 @@ class InventoryFragment : Fragment() {
         recyclerView.adapter = adapter
 
 
-        // Configurar el AutoCompleteTextView
         binding.autoCompleteEditTextCodigo.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
@@ -74,17 +73,13 @@ class InventoryFragment : Fragment() {
                 val product = productsSuggest.find { it.code == code }
                 Log.d("escribiendo","$code")
                 if (product != null) {
-
-
                     binding.inputNombre.setText(product.name)
                     binding.inputCantidad.setText(product.quantity.toString())
                     binding.inputPrecio.setText(product.price.toString())
 
-                    // Cerrar el teclado
                     val imm = requireActivity().getSystemService(InputMethodManager::class.java)
                     imm.hideSoftInputFromWindow(binding.autoCompleteEditTextCodigo.windowToken, 0)
                 } else {
-                    // Limpiar campos si no se encuentra el producto
                     binding.inputNombre.setText("")
                     binding.inputCantidad.setText("")
                     binding.inputPrecio.setText("")
@@ -143,18 +138,16 @@ class InventoryFragment : Fragment() {
     }
 
     private fun loadProducts() {
-        // Servicio de Firebase para obtener productos
         productService.getAllProductos { productList ->
             if (isAdded) {
                 Log.d("products firebase", "$productList")
                 productsSuggest.clear()
                 productsSuggest.addAll(productList)
 
-                // Configurar las sugerencias en el AutoCompleteTextView
                 val adapter = ArrayAdapter(
                     requireContext(),
                     android.R.layout.simple_dropdown_item_1line,
-                    productsSuggest.map { it.code } // Mostrar códigos de productos
+                    productsSuggest.map { it.code }
                 )
                 binding.autoCompleteEditTextCodigo.setAdapter(adapter)
             }

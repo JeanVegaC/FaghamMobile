@@ -32,7 +32,6 @@
         android:padding="12dp"
         android:textSize="14sp" />
 
-    <!-- Campo Email -->
     <EditText
         android:id="@+id/emailEditText"
         android:layout_width="300dp"
@@ -44,7 +43,6 @@
         android:padding="12dp"
         android:textSize="14sp" />
 
-    <!-- Campo Contraseña -->
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="300dp"
@@ -56,7 +54,6 @@
         android:padding="12dp"
         android:textSize="14sp" />
 
-    <!-- Botón de Iniciar Sesión -->
     <Button
         android:id="@+id/loginButton"
         android:layout_width="250dp"

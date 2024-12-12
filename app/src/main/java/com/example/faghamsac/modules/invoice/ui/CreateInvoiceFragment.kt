@@ -141,7 +141,7 @@ class CreateInvoiceFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
                     val sharedPreferences = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-                    val token = sharedPreferences.getString("token", "") // Obtiene el token guardado o un valor vacío si no existe
+                    val token = sharedPreferences.getString("token", "")
 
                     if (token.isNullOrEmpty()) {
                         Log.e("Token", "Token no encontrado")
@@ -149,7 +149,7 @@ class CreateInvoiceFragment : Fragment() {
                     }
 
                     emitInvoice(invoiceReq, invoiceType, token, onSuccess = { respuesta ->
-                        Toast.makeText(requireContext(), "Cotización emitida: $respuesta", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Emitiendo: $respuesta", Toast.LENGTH_SHORT).show()
                     }, onError = { error ->
                         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
                     })

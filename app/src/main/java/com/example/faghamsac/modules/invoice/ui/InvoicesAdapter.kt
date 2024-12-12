@@ -72,7 +72,7 @@ class InvoicesAdapter(private val invoices: List<Invoice>, private val invoiceSe
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val sharedPreferences = context.getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
-                val token = sharedPreferences.getString("token", "") // Obtiene el token guardado o un valor vacío si no existe
+                val token = sharedPreferences.getString("token", "")
 
                 Log.d("Token", "Token obtenido: $token")
 
@@ -136,7 +136,6 @@ class InvoicesAdapter(private val invoices: List<Invoice>, private val invoiceSe
             try {
                 val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", pdfFile)
 
-                // Configura un intent para que el archivo pueda abrirse
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     setDataAndType(uri, "application/pdf")
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

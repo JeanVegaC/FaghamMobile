@@ -86,9 +86,5 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-    }
 }
 
