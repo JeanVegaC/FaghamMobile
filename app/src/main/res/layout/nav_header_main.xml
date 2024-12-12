@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/side_nav_bar"
-    android:gravity="bottom"
     android:orientation="vertical"
+    android:gravity="center_vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -13,8 +14,18 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <TextView
+        android:id="@+id/user"
+        android:layout_width="256dp"
+        android:layout_height="50dp"
+        android:gravity="bottom"
+        android:text="Usuario:"
+        android:textSize="15dp" />
+
+    <TextView
         android:id="@+id/userMail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_width="256dp"
+        android:layout_height="44dp"
+        android:gravity="center"
+        android:text="andrearocioarroyo@hotmail.com"
+        android:textSize="15dp" />
 </LinearLayout>

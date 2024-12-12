@@ -16,12 +16,15 @@
             android:padding="16dp"
             app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
-                android:id="@+id/inputCodigo"
+
+
+
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteEditTextCodigo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Código"
-                android:inputType="text" />
+                android:hint="Ingrese el código o descripción del producto"
+                />
 
             <EditText
                 android:id="@+id/inputNombre"

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -26,15 +27,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Verificar si el usuario está logueado
         val sharedPreferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
         if (!isLoggedIn) {
-            // Si no está logueado, ir a la pantalla de login
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            finish()  // Para evitar que el usuario regrese a MainActivity sin loguearse
+            finish()
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -58,6 +57,17 @@ class MainActivity : AppCompatActivity() {
         navView.setItemIconTintList(null)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_invoice -> {
+                // Lógica para cerrar sesión
+                logout()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
@@ -66,6 +76,17 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun logout() {
+        val sharedPreferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
 

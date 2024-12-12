@@ -62,18 +62,18 @@ class LoginActivity : AppCompatActivity() {
                     val tokenResponse = response.body()
                     val token = tokenResponse?.c2uToken ?: ""
                     if (token != null && response.isSuccessful) {
+                        Toast.makeText(this@LoginActivity, "Logueo Exitoso", Toast.LENGTH_SHORT).show();
                         val sharedPreferences = getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true)
                         editor.putString("token", "Bearer " + token)
                         editor.apply()
 
-                        val userMailHeader: TextView = findViewById(R.id.userMail)
-                        userMailHeader.text = request.mail
 
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()
+
                     } else {
                         Toast.makeText(this@LoginActivity, "Error de autenticación: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
@@ -85,6 +85,10 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("error", "${e.message}")
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
     }
 }
 

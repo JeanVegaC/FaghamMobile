@@ -9,6 +9,7 @@ import com.example.faghamsac.modules.invoice.model.Product
 
 class ProductService {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
+    private var productListener: ValueEventListener? = null
 
     fun addOrUpdateProduct(product: Product, onComplete: (Boolean) -> Unit) {
         database.child("productos").child(product.code).setValue(product)
@@ -65,5 +66,12 @@ class ProductService {
                 Log.e("ProductService", "Error al obtener producto", exception)
                 onProductReceived(null)
             }
+    }
+
+    fun removeListeners() {
+        val databaseReference = FirebaseDatabase.getInstance().getReference("productos")
+        productListener?.let {
+            databaseReference.removeEventListener(it)
+        }
     }
 }

@@ -128,6 +128,16 @@ class CreateInvoiceFragment : Fragment() {
 
             val invoiceReq = mapPayloadToInvoiceRequest(clientName, clientRuc, invoiceType, productsList);
 
+            productsList.forEach { product ->
+                ProductService().addOrUpdateProduct(product) { success ->
+                    if (success) {
+                        Log.d("ProductService", "Producto ${product.code} actualizado correctamente")
+                    } else {
+                        Log.e("ProductService", "Error al actualizar el producto ${product.code}")
+                    }
+                }
+            }
+
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
                     val sharedPreferences = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
