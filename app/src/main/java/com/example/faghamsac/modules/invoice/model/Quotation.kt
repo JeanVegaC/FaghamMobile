@@ -27,12 +27,12 @@ data class Quotation(
     val costoEnvio: BigDecimal? = null,
     val associated: Boolean = false,
     val vendedor: String = "",
-    val receptor: Receptor = Receptor(), // Suponiendo que Receptor tiene valores por defecto también
+    val receptor: Receptor = Receptor(),
     val detallePedido: String? = null,
     val observaciones: String? = null,
     val idCondicionPago: String? = null,
     val totalOtrosCargos: BigDecimal? = null,
-    val detalle: List<QuotationDetalle> = emptyList(), // Lista vacía por defecto
+    val detalle: List<QuotationDetalle> = emptyList(),
     val repartidor: String? = null,
     val comprobanteRelacionado: String? = null,
     val tieneDelivery: Boolean = false

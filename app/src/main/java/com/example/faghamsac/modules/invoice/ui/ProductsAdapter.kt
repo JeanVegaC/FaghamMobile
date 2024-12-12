@@ -35,7 +35,7 @@ class ProductsAdapter(private val items: MutableList<Product>) : RecyclerView.Ad
 
         holder.textViewProductCode.text = item.code
         holder.textViewProductName.text = item.name
-        holder.textViewQuantity.text = item.cantidad.toString()
+        holder.textViewQuantity.text = item.quantity.toString()
         holder.textViewPrice.text = item.price.toString()
 
         holder.buttonDeleteProduct.setOnClickListener {

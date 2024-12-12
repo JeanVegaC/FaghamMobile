@@ -1,5 +1,8 @@
 package com.example.faghamsac.modules.invoice.model
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 data class InvoiceRequest(
     val anticipos: List<Any> = emptyList(),
     val close2u: Close2U = Close2U(),
@@ -29,7 +32,7 @@ data class Close2U(
 )
 
 data class DatosDocumento(
-    val fechaEmision: String = "2024-12-03",
+    val fechaEmision: String = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
     val fechaVencimiento: String? = null,
     val formaPago: String = "CONTADO",
     val medioPago: String = "EFECTIVO",
@@ -63,9 +66,9 @@ data class DetalleDocumento(
 )
 
 data class Emisor(
-    val correo: String = "andrearocioarroyo@gmail.com",
+    val correo: String = "andrearocioarroyo@hotmail.com",
     val tipoDocumentoIdentidad: String = "RUC",
-    val numeroDocumentoIdentidad: String = "10754522904",
+    val numeroDocumentoIdentidad: String = "10256228233",
     val nombreLegal: String = "ARROYO ELESCANO ANDREA DEL ROCIO",
     val nombreComercial: String = "ARROYO ELESCANO ANDREA DEL ROCIO"
 )

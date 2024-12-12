@@ -28,7 +28,7 @@ fun mapPayloadToInvoiceRequest(clientName: String, clientRuc: String, invoiceTyp
             tipoAfectacion = "GRAVADO_OPERACION_ONEROSA",
             unidadMedida = "UNIDAD_BIENES",
             unidadMedidaNombre = "UNIDAD_BIENES",
-            cantidad = product.cantidad,
+            cantidad = product.quantity,
             valorVentaUnitarioItem = product.price,
             descuento = null,
             grupoUnidadMedida = null,
@@ -36,11 +36,13 @@ fun mapPayloadToInvoiceRequest(clientName: String, clientRuc: String, invoiceTyp
         )
     }
 
+    Log.d("invoiceType", "$invoiceType")
     return InvoiceRequest(
         receptor = ReceptorInvoice(
             nombreLegal = clientName,
             numeroDocumentoIdentidad = clientRuc,
         ),
-        detalleDocumento = detalleDocumento
+        detalleDocumento = detalleDocumento,
+        datosDocumento = DatosDocumento(serie = if (invoiceType == "factura") "FFA1" else "BBV1")
     )
 }

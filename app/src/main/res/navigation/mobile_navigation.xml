@@ -17,5 +17,11 @@
         android:label="@string/menu_listInvoice"
         tools:layout="@layout/fragment_invoice_list" />
 
+    <fragment
+        android:id="@+id/inventory"
+        android:name="com.example.faghamsac.modules.inventory.ui.InventoryFragment"
+        android:label="@string/menu_inventory"
+        tools:layout="@layout/fragment_inventory" />
+
 
 </navigation>

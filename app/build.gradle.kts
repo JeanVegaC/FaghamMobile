@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services") version "4.4.2"
 }
 
 android {
@@ -73,7 +74,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0") // o la versión más reciente
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0") // opcional, para soporte de Lifecycle
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3") // o la versión más reciente
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(platform("com.google.firebase:firebase-bom:32.1.0"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
+
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.activity) // o la versión más reciente
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

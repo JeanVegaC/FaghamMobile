@@ -14,8 +14,8 @@
             android:title="@string/menu_listInvoice" />
 
         <item
-            android:id="@+id/listQuotation"
+            android:id="@+id/inventory"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_listQuotation" />
+            android:title="@string/menu_inventory" />
     </group>
 </menu>

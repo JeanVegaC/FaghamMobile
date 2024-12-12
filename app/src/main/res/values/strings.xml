@@ -9,7 +9,7 @@
 
     <string name="menu_createInvoice">Crear Comprobante</string>
     <string name="menu_listInvoice">Ventas</string>
-    <string name="menu_listQuotation">Inventario</string>
+    <string name="menu_inventory">Inventario</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_create_invoice">CreateInvoiceActivity</string>
