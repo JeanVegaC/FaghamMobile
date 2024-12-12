@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "702506782346",
+    "project_id": "ucv-projects",
+    "storage_bucket": "ucv-projects.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702506782346:android:f6b61063a2b7aa187b2773",
+        "android_client_info": {
+          "package_name": "com.example.faghamsac"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3bMheGzOg47_nHP1sjeEEYK4mVu_dkE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

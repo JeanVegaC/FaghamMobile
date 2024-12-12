@@ -59,7 +59,7 @@
                 app:layout_constraintTop_toBottomOf="@id/textViewClientName"
                 android:layout_margin="16dp"
                 android:padding="12dp"
-                android:background="@drawable/edittext_background" />
+                android:background="@drawable/edit_text_background" />
 
             <!-- Campo para el Ruc  -->
 
@@ -86,7 +86,7 @@
                 android:inputType="number"
                 android:layout_margin="16dp"
                 android:padding="12dp"
-                android:background="@drawable/edittext_background" />
+                android:background="@drawable/edit_text_background" />
 
             <TextView
                 android:id="@+id/textViewProducts"
@@ -108,6 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="Agregar Producto"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textViewProducts" />
 
@@ -263,6 +264,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/recyclerViewProducts"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/white"
                 android:layout_marginTop="16dp"/>
 
 

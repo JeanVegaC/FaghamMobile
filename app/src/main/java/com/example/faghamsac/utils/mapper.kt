@@ -1,48 +1,48 @@
 package com.example.faghamsac.utils
 
 import android.util.Log
+import com.example.faghamsac.modules.invoice.model.DatosDocumento
+import com.example.faghamsac.modules.invoice.model.DetalleDocumento
 import com.example.faghamsac.modules.invoice.model.Invoice
 import com.example.faghamsac.modules.invoice.model.InvoiceItem
 import com.example.faghamsac.modules.invoice.model.InvoicePagination
+import com.example.faghamsac.modules.invoice.model.InvoiceRequest
+import com.example.faghamsac.modules.invoice.model.Product
 import com.example.faghamsac.modules.invoice.model.Quotation
 import com.example.faghamsac.modules.invoice.model.QuotationDetalle
 import com.example.faghamsac.modules.invoice.model.QuotationPagination
 import com.example.faghamsac.modules.invoice.model.Receptor
+import com.example.faghamsac.modules.invoice.model.ReceptorInvoice
+import java.math.BigDecimal
 
-fun mapApiResponseToInvoices(apiResponse: QuotationPagination): List<Quotation> {
-    return apiResponse.result.map { result ->
-        
-        val detalle = result.detalle?.map { item ->
-            QuotationDetalle(
-                codigoProducto = item.codigoProducto, 
-                cantidad = item.cantidad,
-                nombreProducto = item.nombreProducto,
-                precioVenta = item.precioVenta,
-                unidadMedida = item.unidadMedida
-            )
-        } ?: emptyList()
+fun mapPayloadToInvoiceRequest(clientName: String, clientRuc: String, invoiceType: String, productsList: List<Product>): InvoiceRequest {
 
-        Log.d("result", "result: $result")
-
-        val receptor = result.receptor?.let {
-            Receptor(
-                numeroDocumento = it.numeroDocumento,
-                tipoDocumento = it.tipoDocumento,
-                direccion = it.direccion,
-                email = it.email
-            )
-        } ?: Receptor() 
-
-        Quotation(
-            numero = result.numero,
-            moneda = result.moneda,
-            subtotal = result.total,
-            igv = result.igv,
-            total = result.total,
-            detalle = detalle, // Aquí se asigna el detalle mapeado
-            rucReceptor = receptor.numeroDocumento, // Cambiado a "rucReceptor"
-            razonSocialReceptor = "Jhean Carlos Vega", // Asigna un valor por defecto o desde otro campo si aplica
-            fechaEmision = result.fechaEmision
+    val detalleDocumento = productsList.map { product ->
+        DetalleDocumento(
+            codigoProducto = product.code,
+            codigoProductoSunat = null,
+            descripcion = product.name,
+            numeroOrden = 0,
+            tipoProducto = 1,
+            cuenta = "",
+            tipoAfectacion = "GRAVADO_OPERACION_ONEROSA",
+            unidadMedida = "UNIDAD_BIENES",
+            unidadMedidaNombre = "UNIDAD_BIENES",
+            cantidad = product.quantity,
+            valorVentaUnitarioItem = product.price,
+            descuento = null,
+            grupoUnidadMedida = null,
+            descripcionAdicional = emptyList()
         )
     }
+
+    Log.d("invoiceType", "$invoiceType")
+    return InvoiceRequest(
+        receptor = ReceptorInvoice(
+            nombreLegal = clientName,
+            numeroDocumentoIdentidad = clientRuc,
+        ),
+        detalleDocumento = detalleDocumento,
+        datosDocumento = DatosDocumento(serie = if (invoiceType == "factura") "FFA1" else "BBV1")
+    )
 }

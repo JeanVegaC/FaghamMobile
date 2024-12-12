@@ -1,5 +1,6 @@
 package com.example.faghamsac.modules.invoice.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,20 +13,21 @@ import com.example.faghamsac.configuration.ApiClient
 import com.example.faghamsac.databinding.FragmentInvoiceListBinding
 import com.example.faghamsac.modules.invoice.model.Invoice
 import com.example.faghamsac.modules.invoice.model.InvoicePagination
-import com.example.faghamsac.modules.invoice.model.Quotation
-import com.example.faghamsac.modules.invoice.model.QuotationPagination
 import com.example.faghamsac.modules.invoice.services.InvoiceService
-import com.example.faghamsac.utils.mapApiResponseToInvoices
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.example.faghamsac.modules.invoice.services.TokenService
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class InvoiceListFragment : Fragment() {
 
     private lateinit var binding: FragmentInvoiceListBinding
     private lateinit var invoicesAdapter: InvoicesAdapter
-    private var invoicesList = mutableListOf<Quotation>()
+    private var invoicesList = mutableListOf<Invoice>()
     private lateinit var invoiceService: InvoiceService
+    private lateinit var tokenService: TokenService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,53 +38,62 @@ class InvoiceListFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        tokenService = ApiClient.createService(TokenService::class.java)
+        invoiceService = ApiClient.createService(InvoiceService::class.java)
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                invoiceService = ApiClient.createService(InvoiceService::class.java)
-               /* val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI2YWZjODg4Ni04NjVjLTRiMWEtOWZhZC1iNWEwNjA3NTdhNzAiLCJpYXQiOjE3MzA0MDAzMzIsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQyOTEzMn0.s34tdcAzOwrzjNZRFVjdzCEK7IhKJY9bp-16vQ3KCAU"
+                val sharedPreferences = requireContext().getSharedPreferences("userPrefs", Context.MODE_PRIVATE)
+                val token = sharedPreferences.getString("token", "") // Obtiene el token guardado o un valor vacío si no existe
+
+                Log.d("Token asd", "Token obtenido: $token")
+
+                if (token.isNullOrEmpty()) {
+                    Log.e("Token", "Token no encontrado")
+                    return@launch
+                }
+
+                Log.d("Token asd", "Token obtenido: $token")
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
+
+                val fechaFin = LocalDateTime.now()
+                    .plusDays(1)
+                    .toLocalDate()
+                    .atStartOfDay()
+                    .atZone(ZoneOffset.UTC)
+                    .format(formatter)
+
+                val fechaInicio = LocalDateTime.now().minus(1, ChronoUnit.WEEKS).toLocalDate().atStartOfDay()
+                    .atZone(ZoneOffset.UTC).format(formatter)
+
+                Log.d("Fecha", "Fecha inicio: $fechaInicio")
+                Log.d("Fecha", "Fecha fin: $fechaFin")
+
                 val invoices: InvoicePagination = invoiceService.getInvoices(
-                    token,
                     rucEmisor = "10256228233",
                     first = 0,
                     rows = 10,
-                    fechaEmisionInicio = "2024-10-22T05:00:00.000Z",
-                    fechaEmisionFin = "2024-10-29T05:00:00.000Z",
-                    usuarioCreacion = "andrearocioarroyo@hotmail.com",
-                    fechaInicio = "2024-10-22T05:00:00.000Z",
-                    fechaFin = "2024-10-29T05:00:00.000Z",
+                    fechaEmisionInicio = fechaInicio,
+                    fechaEmisionFin = fechaFin,
+                    fechaInicio = fechaInicio,
+                    fechaFin = fechaFin,
                     page = 0,
-                    size = 10
-                )
-                Log.d("aqui", "asdas $invoices")
-                invoicesList.clear()
-                invoicesList.addAll(mapApiResponseToInvoices(invoices))
-                invoicesAdapter.notifyDataSetChanged()
-
-                */
-
-                val token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyNDdiYjQyMS0wZjg0LTQ2NGItYWUwZi01NGQ5MzZhZTAzYWQiLCJpYXQiOjE3MzA0MTUwMjcsImlzcyI6IkNMT1NFMlUiLCJzdWIiOiIxMDI1NjIyODIzM3xhbmRyZWFyb2Npb2Fycm95b0Bob3RtYWlsLmNvbXwxfERFViIsImV4cCI6MTczMDQ0MzgyN30._PDFfI868cph3YKx6uMDBNT8uyjkhal9XUH_OL6K8tI"
-                val invoices: QuotationPagination = invoiceService.getQuotation(
-                    token,
-                    codigoSucursal = "10256228233",
-                    first = 0,
-                    rows = 10,
-                    fechaInicio = "2024-10-24T05:00:00.000Z",
-                    fechaFin = "2024-10-31T05:00:00.000Z",
-                    page = 0,
-                    size = 10
+                    size = 10,
+                    token
                 )
 
                 Log.d("aqui", "asdas $invoices")
                 invoicesList.clear()
-                invoicesList.addAll(mapApiResponseToInvoices(invoices))
+                invoicesList.addAll(invoices.result)
                 invoicesAdapter.notifyDataSetChanged()
 
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e("Token", "Excepción al obtener el token: ${e.message}")
             }
         }
+
 
         binding.invoiceRecyclerView.layoutManager = LinearLayoutManager(context)
 
